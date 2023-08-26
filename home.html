@@ -10,12 +10,23 @@
     <script src="https://code.jquery.com/jquery-3.7.0.min.js" integrity="sha256-2Pmvv0kuTBOenSvLm6bvfBSSHrUJ+3A7x6P5Ebd07/g=" crossorigin="anonymous"></script>
     <!-- html2pdf -->
     <script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.10.1/html2pdf.bundle.min.js"></script>
+    <!-- sweetalert2 -->
+    <script src="
+    https://cdn.jsdelivr.net/npm/sweetalert2@11.7.27/dist/sweetalert2.all.min.js"></script>
+    <link href="
+    https://cdn.jsdelivr.net/npm/sweetalert2@11.7.27/dist/sweetalert2.min.css" rel="stylesheet">
     <title>MyReceipt</title>
+    <style>
+        th{
+            background-color: maroon !important;
+            color: white !important;
+        }
+    </style>
 </head>
 <body>
     <div class="container mt-5">
-        <h1 class="mb-4">MyReceipt</h1>
-        <div class="mb-5">
+        <h1 class="mb-4 text-center">MyReceipt</h1>
+        <!-- <div class="mb-5">
             <h5>Company Details</h5>
             <div class="mb-3">
                 <label for="item" class="form-label">Company Name:</label>
@@ -25,28 +36,41 @@
                 <label for="item" class="form-label">Company Address:</label>
                 <input type="text" class="form-control" id="companyAddress" placeholder="Enter company address">
             </div>
-        </div>
-        <div class="mb-5">
-            <h5>Items Details</h5>
-            <div class="mb-3">
-                <label for="item" class="form-label">Item:</label>
-                <input type="text" class="form-control" id="item" placeholder="Enter item name">
+        </div> -->
+        <div class="row justify-content-md-center">
+            <div class="col-md-5 mt-3 card m-1">
+                <div class="card-body">
+                    <h5>Items Details</h5>
+                <div class="mb-3">
+                    <label for="item" class="form-label">Item:</label>
+                    <input type="text" class="form-control" id="item" placeholder="Enter item name">
+                </div>
+                <div class="mb-3">
+                    <label for="price" class="form-label">Quantity:</label>
+                    <input type="number" class="form-control" id="quantity" placeholder="Enter item quantity">
+                </div>
+                <div class="mb-3">
+                    <label for="price" class="form-label">Price (RM):</label>
+                    <input type="number" class="form-control" id="price" placeholder="Enter item price">
+                </div>
+                <div class="mb-3">
+                    <label for="price" class="form-label">Service Charge (RM):</label>
+                    <input type="number" class="form-control" id="charge" placeholder="Enter item price" value="0">
+                </div>
+                <button class="btn btn-primary" id="addItem">Add Item</button>
+                </div>
             </div>
-            <div class="mb-3">
-                <label for="price" class="form-label">Quantity:</label>
-                <input type="number" class="form-control" id="quantity" placeholder="Enter item quantity">
-            </div>
-            <div class="mb-3">
-                <label for="price" class="form-label">Price (RM):</label>
-                <input type="number" class="form-control" id="price" placeholder="Enter item price">
+            <div class="col-md-5 mt-3 card m-1">
+                <div class="card-body">
+                    <h4 style="display: inline;">Total: <span id="totalAmount">RM 0.00</span></h4>
+                    <button class="btn btn-success" id="generateReceipt" style="float: right;">Generate Receipt</button>
+                    <ul class="list-group mt-4" id="receiptItems"></ul>
+                </div>
             </div>
         </div>
         
         
-        <button class="btn btn-primary" id="addItem">Add Item</button>
-        <button class="btn btn-success" id="generateReceipt">Generate Receipt</button>
-        <ul class="list-group mt-4" id="receiptItems"></ul>
-        <h4 class="mt-4">Total: <span id="totalAmount">RM 0.00</span></h4>
+        
 
         <div class="modal fade" id="receiptModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
             <div class="modal-dialog modal-dialog-scrollable modal-xl">
@@ -61,7 +85,7 @@
                           <div class="container mb-5 mt-3">
                             <div class="row d-flex align-items-baseline">
                               <div class="col-xl-9">
-                                <p style="color: #7e8d9f;font-size: 20px;">Receipt >> <strong>ID: #123-123</strong></p>
+                                <p style="color: #7e8d9f;font-size: 20px;">Receipt >> <strong>ID: <span class="receiptID">#123-123</span></strong></p>
                               </div>
                               <hr>
                             </div>
@@ -69,36 +93,27 @@
                               <div class="col-md-12">
                                 <div class="text-center">
                                   <i class="fab fa-mdb fa-4x ms-0" style="color:#5d9fc5 ;"></i>
-                                  <p class="pt-0">Infinity Excel Marketing Sdn Bhd</p>
+                                  <h4 class="pt-0">Infinity Excel Marketing Sdn Bhd</h4>
                                 </div>
                       
                               </div>
                               <div class="row">
                                 <div class="col-xl-8">
                                   <ul class="list-unstyled">
-                                    <li class="text-muted">To: <span style="color:#5d9fc5 ;">John Lorem</span></li>
-                                    <li class="text-muted">Street, City</li>
-                                    <li class="text-muted">State, Country</li>
-                                    <li class="text-muted"><i class="fas fa-phone"></i> 123-456-789</li>
+                                    <li class="text-muted"><i class="fas fa-circle" style="color:#84B0CA ;"></i> <span
+                                        class="fw-bold">ID:</span><span class="receiptID">#123-123</span></li>
+                                    <li class="text-muted"><i class="fas fa-circle" style="color:#84B0CA ;"></i> <span
+                                        class="fw-bold">Creation Date: </span>Jun 23,2021</li>
                                   </ul>
                                 </div>
                                 <div class="col-xl-4">
-                                  <p class="text-muted">Receipt</p>
-                                  <ul class="list-unstyled">
-                                    <li class="text-muted"><i class="fas fa-circle" style="color:#84B0CA ;"></i> <span
-                                        class="fw-bold">ID:</span>#123-456</li>
-                                    <li class="text-muted"><i class="fas fa-circle" style="color:#84B0CA ;"></i> <span
-                                        class="fw-bold">Creation Date: </span>Jun 23,2021</li>
-                                    <li class="text-muted"><i class="fas fa-circle" style="color:#84B0CA ;"></i> <span
-                                        class="me-1 fw-bold">Status:</span><span class="badge bg-warning text-black fw-bold">
-                                        Unpaid</span></li>
-                                  </ul>
+                                  
                                 </div>
                               </div>
                       
                               <div class="row my-2 mx-1 justify-content-center">
-                                <table class="table table-striped table-borderless">
-                                  <thead style="background-color:#84B0CA ;" class="text-white">
+                                <table class="table">
+                                  <thead>
                                     <tr>
                                       <th scope="col">#</th>
                                       <th scope="col">Item</th>
@@ -107,44 +122,32 @@
                                       <th scope="col">Amount (RM)</th>
                                     </tr>
                                   </thead>
-                                  <tbody>
-                                    <tr>
-                                      <th scope="row">1</th>
-                                      <td>Pro Package</td>
-                                      <td>4</td>
-                                      <td>$200</td>
-                                      <td>$800</td>
-                                    </tr>
-                                    <tr>
-                                      <th scope="row">2</th>
-                                      <td>Web hosting</td>
-                                      <td>1</td>
-                                      <td>$10</td>
-                                      <td>$10</td>
-                                    </tr>
-                                    <tr>
-                                      <th scope="row">3</th>
-                                      <td>Consulting</td>
-                                      <td>1 year</td>
-                                      <td>$300</td>
-                                      <td>$300</td>
-                                    </tr>
+                                  <tbody id="billItems">
+                                    
                                   </tbody>
                       
                                 </table>
                               </div>
                               <div class="row">
-                                <div class="col-xl-8">
-                                  <p class="ms-3">Add additional notes and payment information</p>
+                                <div class="col-xl-6">
+                                  
                       
                                 </div>
-                                <div class="col-xl-3">
-                                  <ul class="list-unstyled">
-                                    <li class="text-muted ms-3"><span class="text-black me-4">SubTotal</span>$1110</li>
-                                    <li class="text-muted ms-3 mt-2"><span class="text-black me-4">Tax(15%)</span>$111</li>
-                                  </ul>
-                                  <p class="text-black float-start"><span class="text-black me-3"> Total Amount</span><span
-                                      style="font-size: 25px;">$1221</span></p>
+                                <div class="col-xl-6">
+                                    <div class="row">
+                                        <div class="col-md">
+                                            <span class="text-black">SubTotal</span>
+                                            <span class="text-black">Service Charge</span>
+                                            <h6 class="text-black mt-2">Total Amount</h6>
+                                        </div>
+                                        <div class="col-md">
+                                            RM <span id="subtotal">0.00</span><br>
+                                            RM <span id="serviceCharge">0.00</span>
+                                            <h5 class="mt-2">RM <span id="totalAll">0.00</span></h5>
+                                        </div>
+                                    </div>
+
+                                  
                                 </div>
                               </div>
                       
@@ -171,6 +174,8 @@
         const currentYear = new Date().getFullYear();
         const currentMonth = (new Date().getMonth()+1).toString().padStart(2, '0');
         const currentDay = new Date().getDate().toString().padStart(2, '0');
+        const currentHours = new Date().getHours();
+        const currentMinutes= new Date().getMinutes();
         let items = [];
 
         addItemButton.click(function () {
@@ -204,20 +209,33 @@
         });
 
         generateReceiptButton.click(function () {
-            $('#receiptModal').modal('show')
-            $('#billItems').empty()
-            console.log(items)
-            const tableBody = $('#billItems');
-            $.each(items, function(index, item) {
-                const newRow = $('<tr>');
-                newRow.append($('<td>').text(index+1));
-                newRow.append($('<td>').text(item.item));
-                newRow.append($('<td>').text(item.quantity));
-                newRow.append($('<td>').text(item.price.toFixed(2)));
-                newRow.append($('<td>').text(item.totalItem.toFixed(2)));
-                tableBody.append(newRow);
-            });
-            $("#billTotal").text(totalPrice.toFixed(2))
+            if(items.length>0){
+                $('#receiptModal').modal('show')
+                $('#billItems').empty()
+                let receiptid = `#${currentDay}${currentMonth}${currentYear}-${currentHours}${currentMinutes}`
+                const tableBody = $('#billItems');
+                $.each(items, function(index, item) {
+                    const newRow = $('<tr>');
+                    newRow.append($('<td>').text(index+1));
+                    newRow.append($('<td>').text(item.item));
+                    newRow.append($('<td>').text(item.quantity));
+                    newRow.append($('<td>').text(item.price.toFixed(2)));
+                    newRow.append($('<td>').text(item.totalItem.toFixed(2)));
+                    tableBody.append(newRow);
+                });
+                $(".receiptID").text(receiptid)
+                $("#subtotal").text(totalPrice.toFixed(2))
+                $("#serviceCharge").text(parseFloat($("#charge").val()).toFixed(2))
+                $("#totalAll").text((totalPrice+parseFloat($("#charge").val())).toFixed(2))
+            }
+            else{
+                Swal.fire(
+                'Incomplete Receipt',
+                'Please add at least one item into receipt',
+                'error'
+                )
+            }
+            
         });
         
         $("#downloadReceipt").click(function (e) {
